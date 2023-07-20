@@ -135,14 +135,22 @@ type ParsedToken = KeycloakTokenParsed & {
   family_name?: string
 }
 
-const Home = () => {
+type sesion={
+  red:any
+}
+
+const Home = ({red}:sesion) => {
   const { keycloak } = useKeycloak<keycloak>()
   const parsedToken: ParsedToken | undefined = keycloak?.tokenParsed
+
+  console.log(red);
+  
 
   const loggedinState = keycloak?.authenticated ? (
     <span className="text-success">logged in</span>
   ) : (
-    <span className="text-danger">NOT logged in</span>
+    <span className="text-danger">NOT logged in </span>
+    
   )
 
   const welcomeMessage =
@@ -235,6 +243,8 @@ const Home = () => {
     <h1 className="mt-5">Hello Next.js + Keycloak 👋</h1>
        <main className="mb-5 lead text-muted">
          This is an example of a Next.js site using Keycloak.
+         <br />
+         <span>Redis conectado: {red}</span>
       </main>
 
       <p>You are: {loggedinState}</p>
@@ -253,6 +263,23 @@ const Home = () => {
     </footer>
   </>
   )
+}
+
+import { GetServerSideProps } from 'next'
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const res = await fetch("http://localhost:3000/api/prueba")
+  const data = await res.json()
+  console.log(data);
+  
+  const red = data.redis
+  return {
+    props: {
+      red,
+    },
+  }
 }
 
 export default Home

@@ -1,15 +1,7 @@
-
-
 import "@/styles/globals.css";
-import { IncomingMessage } from "http";
-import type { AppContext, AppProps } from "next/app";
-
-import cookie from "cookie";
-
+import type { AppProps } from "next/app";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
-import { CookiesProvider } from "react-cookie";
 import keycloak from "keycloak-js";
-
 
 const keycloakCfg = {
   url: "http://localhost:8080/",
@@ -18,10 +10,7 @@ const keycloakCfg = {
   onLoad: "login-required",
 };
 
-
-
-const App = ({ Component, pageProps }: AppProps ) => {
-  
+const App = ({ Component, pageProps }: AppProps  ) => {
 
   //@ts-ignore
   let client: Keycloak;
@@ -29,21 +18,49 @@ const App = ({ Component, pageProps }: AppProps ) => {
     client = new keycloak(keycloakCfg);
   }
 
+  const onKeycloakEvent = (event:any, error:any) => {
+    console.log('onKeycloakEvent', event, error)
+  }
 
+  const onKeycloakTokens = (tokens:any) => {
+    console.log('onKeycloakTokens', tokens)
+  }
   
+
   return (
     <ReactKeycloakProvider
       initOptions={{
         onLoad: "login-required",
       }}
       authClient={client}
+      onEvent={onKeycloakEvent}
+      onTokens={onKeycloakTokens}
+      autoRefreshToken={true}
+
     >
-      <Component {...pageProps} />
+      {/* <SessionProvider session={sesion}> */}
+
+        <Component {...pageProps} />
+      {/* </SessionProvider> */}
     </ReactKeycloakProvider>
   );
   
 };
 
+
 export default App;
 
+// export async function getServerSideProps(context:any) {
+
+//   const sesion = session({
+//     secret: 'pruebas',
+//     resave: false,
+//     saveUninitialized: true,
+//     store: store,
+//   });
+
+//   return {
+//     props: sesion, // will be passed to the page component as props
+//   }
+// }
 
