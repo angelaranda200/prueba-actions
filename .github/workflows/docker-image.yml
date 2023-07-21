@@ -29,5 +29,5 @@ jobs:
         
     - name: Build Docker Image
       run: |
-        docker push angelaranda04/prueba-actions:v0.0.2 . 
+        docker push angelaranda04/prueba-actions:v0.0.2 .
 
