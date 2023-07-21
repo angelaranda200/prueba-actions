@@ -30,5 +30,4 @@ jobs:
     - name: Build Docker Image
       run: |
         docker push angelaranda04/prueba-actions:v0.0.2 .
-#     - name: Build the Docker image
-#       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
