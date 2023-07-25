@@ -170,7 +170,7 @@ const Home = ({red}:sesion) => {
     // </Layout>
     <>
     <Head>
-      <title>Home | Next.js + TypeScript Example</title>
+      <title>Home | Next.js + TypeScript Ejemplos</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       
@@ -178,7 +178,7 @@ const Home = ({red}:sesion) => {
 
     <header className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm ">
       <Link href="/" className="my-0 mr-md-auto font-weight-bold text-dark">
-        Next.js + Keycloak
+        Next.js + Keycloak + Redis
       </Link>
       
         <Link href="/profile" className="p-2 text-dark">
