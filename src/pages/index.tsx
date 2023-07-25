@@ -242,7 +242,7 @@ const Home = ({red}:sesion) => {
     <main className="container my-5">
     <h1 className="mt-5">Hello Next.js + Keycloak 👋</h1>
        <main className="mb-5 lead text-muted">
-         This is an example of a Next.js site using Keycloak.
+         Este es un ejemplo de NextJS usando Keycloak y Redis
          <br />
          <span>Redis conectado: {red}</span>
       </main>
