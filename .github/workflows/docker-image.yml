@@ -15,16 +15,25 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
-      with: 
-        fetch-depth: 0
-        
-    - name: Git Semantic Version
-      uses: PaulHatch/semantic-version@v4.0.3
+    - uses: actions/setup-node@v3
       with:
-        major_pattern: "major:"
-        minor_pattern: "feat:"
-        format: "${major}.${minor}.${patch}-prerelease${increment}"
+          node-version: 18.16.0
+        
+    - name: Dependecies
+      run: npm ci
+      
+    - name: Build
+      run: npm run build
+        
+    - name: Save version
       id: version
+      run: echo ::set-output name=tag::$(echo $(node -p -e "require('./package.json').version"))
+        
+    - name: Increase version
+      run: npm version patch
+        
+    - name: Push new version
+      run: git push
         
     - name: Docker login
       env:
@@ -35,14 +44,14 @@ jobs:
         
     - name: Build Docker Image
       env: 
-        NEW_VERSION: ${{ steps.version.outputs.version }}
+        NEW_VERSION: ${{steps.version.outputs.tag}}
       run: |
         docker build -t angelaranda04/prueba-actions:$NEW_VERSION .
         docker build -t angelaranda04/prueba-actions:latest .
         
     - name: Push Docker Image
       env: 
-        NEW_VERSION: ${{ steps.version.outputs.version }}
+        NEW_VERSION: ${{steps.version.outputs.tag}}
       run: |
         docker push angelaranda04/prueba-actions:$NEW_VERSION
         docker push angelaranda04/prueba-actions:latest
