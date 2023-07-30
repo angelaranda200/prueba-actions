@@ -18,7 +18,12 @@ jobs:
     - uses: actions/setup-node@v3
       with:
           node-version: 18.16.0
-        
+      
+    - name: setup git config
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"  
+    
     - name: Dependecies
       run: npm ci
       
