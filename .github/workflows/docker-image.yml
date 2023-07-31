@@ -38,5 +38,5 @@ jobs:
       with:
         context: .
         push: true
-        tags: angelaranda04/prueba-actions:${{ steps.extract_version.outputs.version }} - ${IMAGE_TAG}
+        tags: angelaranda04/prueba-actions:${IMAGE_TAG}
 
