@@ -36,9 +36,6 @@ jobs:
         
     - name: Increase version
       run: npm version patch
-      
-    - name: Push new version
-      run: git push
         
     - name: Docker login
       env:
