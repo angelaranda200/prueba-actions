@@ -38,5 +38,5 @@ jobs:
       with:
         context: .
         push: true
-        tags: angelaranda04/prueba-actions:${IMAGE_TAG}
+        tags: angelaranda04/prueba-actions:${{ env.IMAGE_TAG }}
 
