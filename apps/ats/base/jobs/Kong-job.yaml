@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kong-migrations-job
+  namespace: dev
+spec:
+  template:
+    spec:
+      containers:
+      - name: kong-migrations-container
+        image: kong/kong-gateway:3.3.0.0
+        command: ["kong", "migrations", "bootstrap"]
+        env:
+        - name: KONG_DATABASE
+          value: postgres
+        - name: KONG_PG_USER
+          value: postgres
+        - name: KONG_PG_HOST
+          value: postgres15
+        - name: KONG_PG_PASSWORD
+          value: password
+        - name: KONG_PASSWORD
+          value: test
+      restartPolicy: Never

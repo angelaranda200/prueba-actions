@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres15-pv
+  namespace: dev
+  labels:
+    type: local
+    app: postgres15
+spec:
+  storageClassName: "standard"
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: postgres15
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres15-pvc
+  namespace: dev
+  labels:
+    app: postgres15
+spec:
+  storageClassName: "standard"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,21 @@
+# Namespace: qa
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa
+
+---
+
+# Namespace: dev
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+
+---
+
+# Namespace: prod
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod

@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-deployment
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kong-gateway
+  template:
+    metadata:
+      labels:
+        app: kong-gateway
+    spec:
+      containers:
+        - name: kong-container
+          image: kong/kong-gateway:3.3.0.0
+          ports:
+            - containerPort: 8000
+            - containerPort: 8443
+            - containerPort: 8001
+            - containerPort: 8444
+            - containerPort: 8002
+            - containerPort: 8445
+            - containerPort: 8003
+            - containerPort: 8004
+          env:
+            - name: KONG_DATABASE
+              value: "postgres"
+            - name: KONG_PG_HOST
+              value: "postgres15"
+            - name: KONG_PG_USER
+              value: "postgres"
+            - name: KONG_PG_PASSWORD
+              value: "password"
+            - name: KONG_PROXY_ACCESS_LOG
+              value: "/dev/stdout"
+            - name: KONG_ADMIN_ACCESS_LOG
+              value: "/dev/stdout"
+            - name: KONG_PROXY_ERROR_LOG
+              value: "/dev/stderr"
+            - name: KONG_ADMIN_ERROR_LOG
+              value: "/dev/stderr"
+            - name: KONG_ADMIN_LISTEN
+              value: "0.0.0.0:8001"
+            - name: KONG_ADMIN_GUI_URL
+              value: "http://localhost:8002"
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+      initContainers:
+      - name: init-postgres-service
+        image: busybox
+        command: ['sh', '-c', 'until nslookup postgres15.dev.svc.cluster.local; do echo waiting for postgres15.dev.svc.cluster.local; sleep 2; done;']
+      restartPolicy: Always   
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-service
+  namespace: dev
+spec:
+  selector:
+    app: kong-gateway
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 8443
+    - name: admin-http
+      protocol: TCP
+      port: 8001
+      targetPort: 8001
+    - name: admin-https
+      protocol: TCP
+      port: 8444
+      targetPort: 8444
+    - name: admin-gui-http
+      protocol: TCP
+      port: 8002
+      targetPort: 8002
+    - name: admin-gui-https
+      protocol: TCP
+      port: 8445
+      targetPort: 8445
+    - name: additional-port-1
+      protocol: TCP
+      port: 8003
+      targetPort: 8003
+    - name: additional-port-2
+      protocol: TCP
+      port: 8004
+      targetPort: 8004
+  type: LoadBalancer

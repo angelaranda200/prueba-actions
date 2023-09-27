@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres15
+  namespace: dev
+  labels:
+    app: postgres15
+spec:
+  ports:
+  - name: "5432"
+    port: 5432
+    targetPort: 5432
+  selector:
+   app: postgres15
+  type: LoadBalancer
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres15
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: postgres15
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres15
+        version: 1.0.0
+        environment: dev
+    spec:
+      containers:
+      - name: postgres15
+        image: postgres:15.3-alpine
+        env:
+          - name: POSTGRES_USER
+            value: postgres
+          - name: POSTGRES_PASSWORD
+            value: password
+        ports:
+        - containerPort: 5432
+          name: postgres15
+        securityContext:
+          privileged: false
+        volumeMounts:
+        - name: postgres15-storage
+          mountPath: /var/lib/postgresql/data
+        resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+      restartPolicy: Always
+      volumes:
+      - name: postgres15-storage
+        persistentVolumeClaim:
+          claimName: postgres15-pvc
+      
+

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: next-service
+  namespace: dev
+spec:
+  selector:
+    app: next-app
+  ports:
+    - name: my-app
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: next-deployment
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: next-app
+  template:
+    metadata:
+      labels:
+        app: next-app
+    spec:
+      containers:
+        - name: next-container
+          image: analistait02/demo-front:0.1.0-e43e3
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+         
